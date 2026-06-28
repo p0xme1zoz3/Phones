@@ -6,7 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
-builder.Services.AddScoped<IRepository, Repository>();
+builder.Services.AddSingleton<IRepository, Repository>();
 
 var app = builder.Build();
 
@@ -15,13 +15,6 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
-
-List<Phone> phones = new List<Phone>()
-{
-    new Phone(1,"Nokia","3410",new DateOnly(2005,10,1),0),
-    new Phone(2,"Nokia","1600",new DateOnly(2007,6,1),0),
-    new Phone(3,"Nokia","E-71",new DateOnly(2011,5,1),0)
-};
 
 app.UseHttpsRedirection();
 
