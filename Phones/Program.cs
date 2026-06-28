@@ -32,6 +32,32 @@ app.MapGet("api/phones/{Id}", (int Id) =>
     return Results.Json(phone);
 });
 
-app.MapPut("/phones/{Id}", (int Id) => phones.FirstOrDefault(u => u.Id == Id));
+app.MapPut("api/phones/update", (Phone phone) =>
+{
+    Phone phoneItem = phones.FirstOrDefault(u => u.Id == phone.Id);
+    if (phoneItem == null) return Results.NotFound(new {message = "Phone not found"});
+    phoneItem.Brand = phone.Brand;
+    phoneItem.Model = phone.Model;
+    phoneItem.Date = phone.Date;
+    phoneItem.Price = phone.Price;
+    return Results.Json(phoneItem);
+});
+
+app.MapDelete("api/phones/delete/{Id}", (int Id) =>
+{
+    Phone phone = phones.FirstOrDefault(u => u.Id == Id);
+    if (phone == null) return Results.NotFound(new {message = "Phone not found"});
+    phones.Remove(phone);
+    return Results.Json(phone);
+});
+
+app.MapPost("api/phones/create", (Phone phone) =>
+{
+    int id = phones[phones.Count-1].Id+1; 
+    phone.Id = id;
+    phones.Add(phone);
+    return Results.Json(phone);
+});
+
 app.Run();
 
