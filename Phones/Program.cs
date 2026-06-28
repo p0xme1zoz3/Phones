@@ -1,10 +1,12 @@
 using Phones.Model;
+using Phones.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+builder.Services.AddScoped<IRepository, Repository>();
 
 var app = builder.Build();
 
@@ -24,39 +26,35 @@ List<Phone> phones = new List<Phone>()
 app.UseHttpsRedirection();
 
 app.MapGet("/", () => "My phones");
-app.MapGet("/api/phones", () => phones);
-app.MapGet("api/phones/{Id}", (int Id) =>
+app.MapGet("/api/phones", (IRepository repo) => repo.AllPhones());
+
+app.MapGet("api/phones/{id}", (IRepository repo, int id) =>
 {
-    Phone phone = phones.FirstOrDefault(u => u.Id == Id);
-    if (phone == null) return Results.NotFound(new {message = "Phone not found"});
-    return Results.Json(phone);
+    var res = repo.GetPhone(id);
+    if (res.Id == 0)
+        return Results.NotFound(new { message = "Phone not found" });
+    return Results.Json(res);
 });
 
-app.MapPut("api/phones/update", (Phone phone) =>
+app.MapPut("api/phones/update", (IRepository repo, Phone phone) =>
 {
-    Phone phoneItem = phones.FirstOrDefault(u => u.Id == phone.Id);
-    if (phoneItem == null) return Results.NotFound(new {message = "Phone not found"});
-    phoneItem.Brand = phone.Brand;
-    phoneItem.Model = phone.Model;
-    phoneItem.Date = phone.Date;
-    phoneItem.Price = phone.Price;
-    return Results.Json(phoneItem);
+    var res = repo.UpdatePhone(phone);
+    if (res.Id == 0)
+        return Results.NotFound(new { message = "Phone not found" });
+    return Results.Json(res);
 });
 
-app.MapDelete("api/phones/delete/{Id}", (int Id) =>
+app.MapDelete("api/phones/delete/{id}", (IRepository repo, int id) =>
 {
-    Phone phone = phones.FirstOrDefault(u => u.Id == Id);
-    if (phone == null) return Results.NotFound(new {message = "Phone not found"});
-    phones.Remove(phone);
-    return Results.Json(phone);
+    Phone res = repo.DeletePhone(id); 
+    if (res.Id == 0) return Results.NotFound(new {message = "Phone not found"});
+    return Results.Json(res);
 });
 
-app.MapPost("api/phones/create", (Phone phone) =>
+app.MapPost("api/phones/create", (IRepository repo, Phone phone) =>
 {
-    int id = phones[phones.Count-1].Id+1; 
-    phone.Id = id;
-    phones.Add(phone);
-    return Results.Json(phone);
+    Phone res = repo.AddPhone(phone);
+    return Results.Json(res);
 });
 
 app.Run();
