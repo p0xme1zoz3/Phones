@@ -24,8 +24,14 @@ List<Phone> phones = new List<Phone>()
 app.UseHttpsRedirection();
 
 app.MapGet("/", () => "My phones");
-app.MapGet("/phones/all", () => phones);
-app.MapGet("/phones/{Id}", (int Id) => phones.FirstOrDefault(u => u.Id == Id));
+app.MapGet("/api/phones", () => phones);
+app.MapGet("api/phones/{Id}", (int Id) =>
+{
+    Phone phone = phones.FirstOrDefault(u => u.Id == Id);
+    if (phone == null) return Results.NotFound(new {message = "Phone not found"});
+    return Results.Json(phone);
+});
 
+app.MapPut("/phones/{Id}", (int Id) => phones.FirstOrDefault(u => u.Id == Id));
 app.Run();
 
