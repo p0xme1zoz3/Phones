@@ -1,3 +1,5 @@
+using Phones.Model;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -12,32 +14,18 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-app.UseHttpsRedirection();
-
-var summaries = new[]
+List<Phone> phones = new List<Phone>()
 {
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
+    new Phone(1,"Nokia","3410",new DateOnly(2005,10,1),0),
+    new Phone(2,"Nokia","1600",new DateOnly(2007,6,1),0),
+    new Phone(3,"Nokia","E-71",new DateOnly(2011,5,1),0)
 };
 
-app.MapGet("/weatherforecast", () =>
-    {
-        var forecast = Enumerable.Range(1, 5).Select(index =>
-                new WeatherForecast
-                (
-                    DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                    Random.Shared.Next(-20, 55),
-                    summaries[Random.Shared.Next(summaries.Length)]
-                ))
-            .ToArray();
-        return forecast;
-    })
-    .WithName("GetWeatherForecast");
+app.UseHttpsRedirection();
 
-app.MapGet("/", () => "Hello World!");
+app.MapGet("/", () => "My phones");
+app.MapGet("/phones/all", () => phones);
+app.MapGet("/phones/{Id}", (int Id) => phones.FirstOrDefault(u => u.Id == Id));
 
 app.Run();
 
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
