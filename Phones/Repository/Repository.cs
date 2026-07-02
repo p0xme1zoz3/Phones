@@ -35,8 +35,15 @@ public class Repository : IRepository
         return phoneItem;
     }
     
-    public async Task<Phone> AddPhone(Phone phone)
+    public async Task<Phone> AddPhone(PhoneDto phoneDto)
     {
+        Phone phone = new Phone
+        {
+            Brand = phoneDto.Brand,
+            Model = phoneDto.Model,
+            Date = phoneDto.Date,
+            Price = phoneDto.Price
+        };
         await _db.Phones.AddAsync(phone);
         await _db.SaveChangesAsync();
         return phone;

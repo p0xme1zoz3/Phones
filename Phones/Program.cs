@@ -57,9 +57,9 @@ app.MapPut("api/phones/update", async (IRepository repo, Phone phone) =>
     return Results.Json(res);
 });
 
-app.MapPost("api/phones/create", async (IRepository repo, Phone phone) =>
+app.MapPost("api/phones/create", async (IRepository repo, PhoneDto phoneDto) =>
 {
-    var res = await repo.AddPhone(phone);
+    var res = await repo.AddPhone(phoneDto);
     return Results.Json(res);
 });
 
