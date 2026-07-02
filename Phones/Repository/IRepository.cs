@@ -4,9 +4,10 @@ namespace Phones.Repository;
 
 public interface IRepository
 {
-    public List<Phone> AllPhones();
-    public Phone GetPhone(int id);
-    public Phone UpdatePhone(Phone phone);
-    public Phone DeletePhone(int id);
-    public Phone AddPhone(Phone phone);
+    public Task<List<Phone>> AllPhones();
+    public Task<Phone> GetPhone(int id);
+    public Task<Phone> UpdatePhone(Phone phone);
+    public Task<Phone> AddPhone(Phone phone);
+    public Task<Phone> DeletePhone(int id);
+ 
 }

@@ -10,41 +10,44 @@ public class Repository : IRepository
     public Repository(ApplicationContext db) 
     { 
         _db = db; 
-    } 
-    
-    public List<Phone> AllPhones() => _db.Phones.ToList();
-    public Phone GetPhone(int id) 
+    }
+
+    public async Task<List<Phone>> AllPhones()
+    {   
+        return await _db.Phones.ToListAsync();
+    }
+    public async Task<Phone> GetPhone(int id) 
     {
-        Phone phone = _db.Phones.FirstOrDefault(u => u.Id == id);
+        var phone = await _db.Phones.FirstOrDefaultAsync(u => u.Id == id);
         if (phone == null) return new Phone();
         return phone;
     }    
     
-    public Phone UpdatePhone(Phone phone)
+    public async Task<Phone> UpdatePhone(Phone phone)
     {
-        Phone phoneItem = _db.Phones.FirstOrDefault(u => u.Id == phone.Id);
+        var phoneItem = await _db.Phones.FirstOrDefaultAsync(u => u.Id == phone.Id);
         if (phoneItem == null) return new Phone();
         phoneItem.Brand = phone.Brand;
         phoneItem.Model = phone.Model;
         phoneItem.Date = phone.Date;
         phoneItem.Price = phone.Price;
-        _db.SaveChanges();
+        await _db.SaveChangesAsync();
         return phoneItem;
     }
     
-    public Phone AddPhone(Phone phone)
+    public async Task<Phone> AddPhone(Phone phone)
     {
-        _db.Phones.Add(phone);
-        _db.SaveChanges();
+        await _db.Phones.AddAsync(phone);
+        await _db.SaveChangesAsync();
         return phone;
     }
     
-    public Phone DeletePhone(int id)
+    public async Task<Phone> DeletePhone(int id)
     {
-        Phone phone = _db.Phones.FirstOrDefault(u => u.Id == id);
+        var phone = await _db.Phones.FirstOrDefaultAsync(u => u.Id == id);
         if (phone == null) return new Phone();
         _db.Phones.Remove(phone);
-        _db.SaveChanges();
+        await _db.SaveChangesAsync();
         return phone;
     }
 }

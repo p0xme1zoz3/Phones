@@ -36,34 +36,37 @@ app.UseHttpsRedirection();
 
 app.MapGet("/", () => "All phones");
 
-app.MapGet("/api/phones", (IRepository repo) => repo.AllPhones());
-
-app.MapGet("api/phones/{id}", (IRepository repo, int id) =>
+app.MapGet("/api/phones", async (IRepository repo) =>
 {
-    var res = repo.GetPhone(id);
+    return await repo.AllPhones();
+});
+
+app.MapGet("api/phones/{id}", async (IRepository repo, int id) =>
+{
+    var res = await repo.GetPhone(id);
     if (res.Id == 0)
         return Results.NotFound(new { message = "Phone not found" });
     return Results.Json(res);
 });
 
-app.MapPut("api/phones/update", (IRepository repo, Phone phone) =>
+app.MapPut("api/phones/update", async (IRepository repo, Phone phone) =>
 {
-    var res = repo.UpdatePhone(phone);
+    var res = await repo.UpdatePhone(phone);
     if (res.Id == 0)
         return Results.NotFound(new { message = "Phone not found" });
     return Results.Json(res);
 });
 
-app.MapDelete("api/phones/delete/{id}", (IRepository repo, int id) =>
+app.MapPost("api/phones/create", async (IRepository repo, Phone phone) =>
 {
-    Phone res = repo.DeletePhone(id); 
+    var res = await repo.AddPhone(phone);
+    return Results.Json(res);
+});
+
+app.MapDelete("api/phones/delete/{id}", async (IRepository repo, int id) =>
+{
+    var res = await repo.DeletePhone(id); 
     if (res.Id == 0) return Results.NotFound(new {message = "Phone not found"});
-    return Results.Json(res);
-});
-
-app.MapPost("api/phones/create", (IRepository repo, Phone phone) =>
-{
-    Phone res = repo.AddPhone(phone);
     return Results.Json(res);
 });
 
