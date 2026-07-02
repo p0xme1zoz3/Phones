@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\projects\\Phones\\phones\\Phones\\Phones.csproj": {}
+    "D:\\projects\\Phones\\Phones\\Phones\\Phones.csproj": {}
   },
   "projects": {
-    "D:\\projects\\Phones\\phones\\Phones\\Phones.csproj": {
+    "D:\\projects\\Phones\\Phones\\Phones\\Phones.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\projects\\Phones\\phones\\Phones\\Phones.csproj",
+        "projectUniqueName": "D:\\projects\\Phones\\Phones\\Phones\\Phones.csproj",
         "projectName": "Phones",
-        "projectPath": "D:\\projects\\Phones\\phones\\Phones\\Phones.csproj",
+        "projectPath": "D:\\projects\\Phones\\Phones\\Phones\\Phones.csproj",
         "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-        "outputPath": "D:\\projects\\Phones\\phones\\Phones\\obj\\",
+        "outputPath": "D:\\projects\\Phones\\Phones\\Phones\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -53,6 +53,8 @@
               "version": "[10.0.9, )"
             },
             "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
               "target": "Package",
               "version": "[10.0.9, )"
             },

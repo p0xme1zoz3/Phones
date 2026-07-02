@@ -1,12 +1,16 @@
+using Microsoft.EntityFrameworkCore;
 using Phones.Model;
 using Phones.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var connection = builder.Configuration.GetConnectionString("DefaultConnection");
+
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
-builder.Services.AddSingleton<IRepository, Repository>();
+builder.Services.AddScoped<IRepository, Repository>();
+builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlite(connection));
 
 var app = builder.Build();
 
@@ -18,12 +22,22 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapGet("/", () => "My phones");
+app.MapGet("/", () => "All phones");
 app.MapGet("/api/phones", (IRepository repo) => repo.AllPhones());
+app.MapGet("/api/phones/db", (IRepository repo) => repo.AllPhonesDb());
+
 
 app.MapGet("api/phones/{id}", (IRepository repo, int id) =>
 {
     var res = repo.GetPhone(id);
+    if (res.Id == 0)
+        return Results.NotFound(new { message = "Phone not found" });
+    return Results.Json(res);
+});
+
+app.MapGet("api/phones/db/{id}", (IRepository repo, int id) =>
+{
+    var res = repo.GetPhoneDb(id);
     if (res.Id == 0)
         return Results.NotFound(new { message = "Phone not found" });
     return Results.Json(res);
@@ -37,6 +51,14 @@ app.MapPut("api/phones/update", (IRepository repo, Phone phone) =>
     return Results.Json(res);
 });
 
+app.MapPut("api/phones/update/db", (IRepository repo, Phone phone) =>
+{
+    var res = repo.UpdatePhoneDb(phone);
+    if (res.Id == 0)
+        return Results.NotFound(new { message = "Phone not found" });
+    return Results.Json(res);
+});
+
 app.MapDelete("api/phones/delete/{id}", (IRepository repo, int id) =>
 {
     Phone res = repo.DeletePhone(id); 
@@ -44,9 +66,22 @@ app.MapDelete("api/phones/delete/{id}", (IRepository repo, int id) =>
     return Results.Json(res);
 });
 
+app.MapDelete("api/phones/delete/db/{id}", (IRepository repo, int id) =>
+{
+    Phone res = repo.DeletePhoneDb(id); 
+    if (res.Id == 0) return Results.NotFound(new {message = "Phone not found"});
+    return Results.Json(res);
+});
+
 app.MapPost("api/phones/create", (IRepository repo, Phone phone) =>
 {
     Phone res = repo.AddPhone(phone);
+    return Results.Json(res);
+});
+
+app.MapPost("api/phones/create/db", (IRepository repo, Phone phone) =>
+{
+    Phone res = repo.AddPhoneDb(phone);
     return Results.Json(res);
 });
 

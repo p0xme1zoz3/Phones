@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "VfqpmTGBJ30=",
+  "dgSpecHash": "KBubPChQO90=",
   "success": true,
-  "projectFilePath": "D:\\projects\\Phones\\phones\\Phones\\Phones.csproj",
+  "projectFilePath": "D:\\projects\\Phones\\Phones\\Phones\\Phones.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Admin\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\microsoft.aspnetcore.openapi\\10.0.5\\microsoft.aspnetcore.openapi.10.0.5.nupkg.sha512",
@@ -42,10 +42,10 @@
     {
       "code": "NU1903",
       "level": "Warning",
-      "message": "У пакета \"SQLitePCLRaw.lib.e_sqlite3\" 2.1.11 есть известная уязвимость https://github.com/advisories/GHSA-2m69-gcr7-jv3q (уровень серьезности: высокий уровень)",
-      "projectPath": "D:\\projects\\Phones\\phones\\Phones\\Phones.csproj",
+      "message": "Package 'SQLitePCLRaw.lib.e_sqlite3' 2.1.11 has a known high severity vulnerability, https://github.com/advisories/GHSA-2m69-gcr7-jv3q",
+      "projectPath": "D:\\projects\\Phones\\Phones\\Phones\\Phones.csproj",
       "warningLevel": 1,
-      "filePath": "D:\\projects\\Phones\\phones\\Phones\\Phones.csproj",
+      "filePath": "D:\\projects\\Phones\\Phones\\Phones\\Phones.csproj",
       "libraryId": "SQLitePCLRaw.lib.e_sqlite3",
       "targetGraphs": [
         "net10.0"
