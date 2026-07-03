@@ -1,4 +1,5 @@
 ﻿using Phones.Model;
+using Phones.Dto;
 using Microsoft.EntityFrameworkCore;
 
 namespace Phones.Repository;

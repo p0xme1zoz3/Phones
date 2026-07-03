@@ -1,4 +1,4 @@
-﻿namespace Phones.Model;
+﻿namespace Phones.Dto;
 
 public class PhoneDto
 {

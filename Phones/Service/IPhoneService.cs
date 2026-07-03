@@ -1,9 +1,9 @@
 ﻿using Phones.Model;
 using Phones.Dto;
 
-namespace Phones.Repository;
+namespace Phones.Services;
 
-public interface IRepository
+public interface IPhoneService
 {
     public Task<List<Phone>> AllPhones();
     public Task<Phone?> GetPhone(int id);

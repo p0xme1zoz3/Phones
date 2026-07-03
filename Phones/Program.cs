@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Phones.Model;
+using Phones.Dto;
 using Phones.Repository;
+using Phones.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +14,7 @@ var connection = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IRepository, Repository>();
+builder.Services.AddScoped<IPhoneService, PhoneService>();
 builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlite(connection));
 
 var app = builder.Build();
@@ -36,36 +39,30 @@ app.UseHttpsRedirection();
 
 app.MapGet("/", () => "All phones");
 
-app.MapGet("/api/phones", async (IRepository repo) =>
+app.MapGet("/api/phones", async (IPhoneService phoneService) => await phoneService.AllPhones());
+
+app.MapGet("api/phones/{id}", async (IPhoneService phoneService, int id) =>
 {
-    return await repo.AllPhones();
+    var res = await phoneService.GetPhone(id);
+    return res == null ? Results.NotFound(new { message = "Phone not found" }) : Results.Json(res);
 });
 
-app.MapGet("api/phones/{id}", async (IRepository repo, int id) =>
+app.MapPut("api/phones/update", async (IPhoneService phoneService, Phone phone) =>
 {
-    var res = await repo.GetPhone(id);
-    if (res == null) return Results.NotFound(new { message = "Phone not found" });
+    var res = await phoneService.UpdatePhone(phone);
+    return res == null ? Results.NotFound(new { message = "Phone not found" }) : Results.Json(res);
+});
+
+app.MapPost("api/phones/create", async (IPhoneService phoneService, PhoneDto phoneDto) =>
+{
+    var res = await phoneService.AddPhone(phoneDto);
     return Results.Json(res);
 });
 
-app.MapPut("api/phones/update", async (IRepository repo, Phone phone) =>
+app.MapDelete("api/phones/delete/{id}", async (IPhoneService phoneService, int id) =>
 {
-    var res = await repo.UpdatePhone(phone);
-    if (res == null) return Results.NotFound(new { message = "Phone not found" });
-    return Results.Json(res);
-});
-
-app.MapPost("api/phones/create", async (IRepository repo, PhoneDto phoneDto) =>
-{
-    var res = await repo.AddPhone(phoneDto);
-    return Results.Json(res);
-});
-
-app.MapDelete("api/phones/delete/{id}", async (IRepository repo, int id) =>
-{
-    var res = await repo.DeletePhone(id); 
-    if (res == null) return Results.NotFound(new {message = "Phone not found"});
-    return Results.Json(res);
+    var res = await phoneService.DeletePhone(id); 
+    return res == null ? Results.NotFound(new {message = "Phone not found"}) : Results.Json(res);
 });
 
 app.Run();
