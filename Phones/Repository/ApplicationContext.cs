@@ -5,7 +5,7 @@ namespace Phones.Repository;
 
 public class ApplicationContext : DbContext
 {
-    public DbSet<Phone> Phones { get; set; } = null;
+    public DbSet<Phone> Phones { get; set; }
 
     public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
     {
@@ -20,5 +20,4 @@ public class ApplicationContext : DbContext
             new Phone { Id = 3, Brand = "Nokia", Model = "E-71",Date = new DateOnly(2011,5,1)}
             );
     }
-    
 }

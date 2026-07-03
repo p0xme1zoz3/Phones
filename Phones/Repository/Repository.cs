@@ -16,17 +16,16 @@ public class Repository : IRepository
     {   
         return await _db.Phones.ToListAsync();
     }
-    public async Task<Phone> GetPhone(int id) 
+    public async Task<Phone?> GetPhone(int id) 
     {
         var phone = await _db.Phones.FirstOrDefaultAsync(u => u.Id == id);
-        if (phone == null) return new Phone();
         return phone;
     }    
     
-    public async Task<Phone> UpdatePhone(Phone phone)
+    public async Task<Phone?> UpdatePhone(Phone phone)
     {
         var phoneItem = await _db.Phones.FirstOrDefaultAsync(u => u.Id == phone.Id);
-        if (phoneItem == null) return new Phone();
+        if (phoneItem == null) return phoneItem;
         phoneItem.Brand = phone.Brand;
         phoneItem.Model = phone.Model;
         phoneItem.Date = phone.Date;
@@ -35,7 +34,7 @@ public class Repository : IRepository
         return phoneItem;
     }
     
-    public async Task<Phone> AddPhone(PhoneDto phoneDto)
+    public async Task<Phone?> AddPhone(PhoneDto phoneDto)
     {
         Phone phone = new Phone
         {
@@ -49,10 +48,10 @@ public class Repository : IRepository
         return phone;
     }
     
-    public async Task<Phone> DeletePhone(int id)
+    public async Task<Phone?> DeletePhone(int id)
     {
         var phone = await _db.Phones.FirstOrDefaultAsync(u => u.Id == id);
-        if (phone == null) return new Phone();
+        if (phone == null) return phone;
         _db.Phones.Remove(phone);
         await _db.SaveChangesAsync();
         return phone;

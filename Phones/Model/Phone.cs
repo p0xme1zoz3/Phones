@@ -4,7 +4,7 @@ public class Phone
 {
     public Phone()
     {
-        Id = 0;
+        
     }
     public Phone(int id, string brand, string model, DateOnly date, decimal price)
     {

@@ -44,16 +44,14 @@ app.MapGet("/api/phones", async (IRepository repo) =>
 app.MapGet("api/phones/{id}", async (IRepository repo, int id) =>
 {
     var res = await repo.GetPhone(id);
-    if (res.Id == 0)
-        return Results.NotFound(new { message = "Phone not found" });
+    if (res == null) return Results.NotFound(new { message = "Phone not found" });
     return Results.Json(res);
 });
 
 app.MapPut("api/phones/update", async (IRepository repo, Phone phone) =>
 {
     var res = await repo.UpdatePhone(phone);
-    if (res.Id == 0)
-        return Results.NotFound(new { message = "Phone not found" });
+    if (res == null) return Results.NotFound(new { message = "Phone not found" });
     return Results.Json(res);
 });
 
@@ -66,7 +64,7 @@ app.MapPost("api/phones/create", async (IRepository repo, PhoneDto phoneDto) =>
 app.MapDelete("api/phones/delete/{id}", async (IRepository repo, int id) =>
 {
     var res = await repo.DeletePhone(id); 
-    if (res.Id == 0) return Results.NotFound(new {message = "Phone not found"});
+    if (res == null) return Results.NotFound(new {message = "Phone not found"});
     return Results.Json(res);
 });
 
