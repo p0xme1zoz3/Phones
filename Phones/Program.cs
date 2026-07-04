@@ -36,6 +36,20 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseExceptionHandler(errorApp =>
+{
+    errorApp.Run(async context =>
+    {
+        context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+        context.Response.ContentType = "application/json";
+
+        await context.Response.WriteAsJsonAsync(new
+        {
+            message = "An internal server error has occurred",
+        });
+    });
+});
+
 app.MapGet("/", () => "All phones");
 
 app.MapGet("/api/phones", async (IPhoneService phoneService) => await phoneService.AllPhones());
