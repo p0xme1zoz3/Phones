@@ -47,15 +47,15 @@ app.MapGet("api/phones/{id}", async (IPhoneService phoneService, int id) =>
     return res == null ? Results.NotFound(new { message = "Phone not found" }) : Results.Json(res);
 });
 
-app.MapPut("api/phones/update", async (IPhoneService phoneService, Phone phone) =>
+app.MapPut("api/phones/update", async (IPhoneService phoneService, PhoneUpdateDto phoneUpdateDto) =>
 {
-    var res = await phoneService.UpdatePhone(phone);
+    var res = await phoneService.UpdatePhone(phoneUpdateDto);
     return res == null ? Results.NotFound(new { message = "Phone not found" }) : Results.Json(res);
 });
 
-app.MapPost("api/phones/create", async (IPhoneService phoneService, PhoneDto phoneDto) =>
+app.MapPost("api/phones/create", async (IPhoneService phoneService, PhoneAddDto phoneAddDto) =>
 {
-    var res = await phoneService.AddPhone(phoneDto);
+    var res = await phoneService.AddPhone(phoneAddDto);
     return Results.Json(res);
 });
 

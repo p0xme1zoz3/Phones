@@ -24,15 +24,17 @@ public class PhoneService : IPhoneService
         return res;
     }
 
-    public Task<Phone?> UpdatePhone(Phone phone)
+    public Task<Phone?> UpdatePhone(PhoneUpdateDto phoneDto)
     {
+        Phone phone = new Phone{Id = phoneDto.Id, Brand = phoneDto.Brand, Model = phoneDto.Model, Price = phoneDto.Price};
         var res = _repo.UpdatePhone(phone);
         return res;
     }
 
-    public Task<Phone?> AddPhone(PhoneDto phoneDto)
+    public Task<Phone?> AddPhone(PhoneAddDto phoneDto)
     {
-        var res = _repo.AddPhone(phoneDto);
+        Phone phone = new Phone{Brand  = phoneDto.Brand, Model = phoneDto.Model, Price = phoneDto.Price};
+        var res = _repo.AddPhone(phone);
         return res;
     }
 
