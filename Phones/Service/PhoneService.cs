@@ -26,14 +26,14 @@ public class PhoneService : IPhoneService
 
     public Task<Phone?> UpdatePhone(PhoneUpdateDto phoneDto)
     {
-        Phone phone = AutoMap.TranslateUpdate(phoneDto);
+        Phone phone = PhoneMapper.ToEntity(phoneDto);
         var res = _repo.UpdatePhone(phone);
         return res;
     }
 
     public Task<Phone?> AddPhone(PhoneAddDto phoneDto)
     {
-        Phone phone = AutoMap.TranslateCreate(phoneDto);
+        Phone phone = PhoneMapper.ToEntity(phoneDto);
         var res = _repo.AddPhone(phone);
         return res;
     }
