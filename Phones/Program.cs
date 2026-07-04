@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using Phones.Model;
 using Phones.Dto;
 using Phones.Repository;
 using Phones.Services;
