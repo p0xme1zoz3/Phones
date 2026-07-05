@@ -1,0 +1,181 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Phones API Frontend</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        td {padding:5px;}
+        button{margin: 5px;}
+    </style>
+</head>
+<body>
+<h1>Phones API</h1>
+<p><a href="/swagger">Documentation API (Swagger)</a></p>
+
+<h2>Phone list</h2>
+
+<div>
+    <input type="hidden" id="phoneId" />
+    <p>
+        Brand:<br/>
+        <input id="phoneBrand" />
+    </p>
+    <p>
+        Model:<br />
+        <input id="phoneModel" />
+    </p>
+    <p>
+        Date:<br />
+        <input id="phoneDate" type="date" />
+    </p>
+    <p>
+        Price:<br />
+        <input id="phonePrice" type="number" />
+    </p>
+    <p>
+        <button id="saveBtn">Save</button>
+        <button id="resetBtn">Reset</button>
+    </p>
+</div>
+
+<table border="1">
+    <thead>
+    <tr><th>#</th><th>Brand</th><th>Model</th><th>Date</th><th>Price</th><th>Actions</th></tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<script>
+    async function getPhones() {
+        const response = await fetch("/api/phones");
+        if (response.ok) {
+            const phones = await response.json();
+            const rows = document.querySelector("tbody");
+            rows.innerHTML = "";
+            phones.forEach((phone, index) => rows.append(row(phone, index + 1)));
+        }
+    }
+
+    async function getPhone(id)     {
+        const response = await fetch(`/api/phones/${id}`);
+        if (response.ok) {
+            const phone = await response.json();
+            document.getElementById("phoneId").value = phone.id;
+            document.getElementById("phoneBrand").value = phone.brand;
+            document.getElementById("phoneModel").value = phone.model;
+            document.getElementById("phoneDate").value = phone.date;
+            document.getElementById("phonePrice").value = phone.price;
+        }
+    }
+
+    async function createPhone(brand, model, date, price) {
+        const response = await fetch("/api/phones/create", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ Brand: brand, Model: model, Date: date, Price: price })
+        });
+        if (!response.ok) {
+            console.log(await response.json());
+        }
+    }
+
+    async function editPhone(id, brand, model, date, price) {
+        const response = await fetch("/api/phones/update", {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ Id: id, Brand: brand, Model: model, Date: date, Price: price })
+        });
+        if (!response.ok) {
+            console.log(await response.json());
+        }
+    }
+
+    async function deletePhone(id) {
+        const response = await fetch(`/api/phones/delete/${id}`, { method: "DELETE" });
+        if (response.ok) {
+            document.querySelector(`tr[data-rowid='${id}']`).remove();
+        }
+    }
+
+    function row(phone, index) {
+        const tr = document.createElement("tr");
+        tr.setAttribute("data-rowid", phone.id);
+
+        tr.innerHTML = `
+            <td>${index}</td>
+            <td>${phone.brand}</td>
+            <td>${phone.model}</td>
+            <td>${phone.date ? new Date(phone.date).toLocaleDateString("ru-RU") : ""}</td>
+            <td>${phone.price}</td>
+            <td>
+                <button onclick="getPhone(${phone.id})">Update</button>
+                <button onclick="deletePhone(${phone.id})">Delete</button>
+            </td>
+        `;
+        return tr;
+    }
+
+    document.getElementById("saveBtn").addEventListener("click", async () => {
+        if (!validateForm()) return;
+        const id = document.getElementById("phoneId").value;
+        const brand = document.getElementById("phoneBrand").value;
+        const model = document.getElementById("phoneModel").value;
+        const date = document.getElementById("phoneDate").value;
+        const price = document.getElementById("phonePrice").value;
+
+        if (id) {
+            await editPhone(id, brand, model, date, price);
+        } else {
+            await createPhone(brand, model, date, price);
+        }
+        await getPhones();
+        resetForm();
+    });
+
+    document.getElementById("resetBtn").addEventListener("click", resetForm);
+
+    function resetForm() {
+        document.getElementById("phoneId").value = "";
+        document.getElementById("phoneBrand").value = "";
+        document.getElementById("phoneModel").value = "";
+        document.getElementById("phoneDate").value = "";
+        document.getElementById("phonePrice").value = "";
+    }
+
+    function validateForm() {
+        const brand = document.getElementById("phoneBrand").value.trim();
+        const model = document.getElementById("phoneModel").value.trim();
+        const date = document.getElementById("phoneDate").value;
+        const price = document.getElementById("phonePrice").value;
+
+        let errors = [];
+
+        if (!brand) errors.push("Enter the brand");
+        if (!model) errors.push("Enter the model");
+        if (!date)
+        {
+            errors.push("Specify the correct date!");
+        } 
+        else 
+        {
+            const dateStr = new Date(date);
+            const minDate = new Date("1994-06-17");
+            const maxDate = new Date(); // сегодня
+
+            if (dateStr < minDate || dateStr > maxDate) {
+                errors.push("Specify the correct date!");
+            }
+        }
+        if (!price || price <= 0) errors.push("The price must be more than 0");
+
+        if (errors.length > 0) {
+            alert(errors.join("\n"));
+            return false;
+        }
+        return true;
+    }
+
+    getPhones();
+</script>
+</body>
+</html>

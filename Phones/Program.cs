@@ -25,8 +25,7 @@ using (var scope = app.Services.CreateScope())
 }
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
+
     //app.MapOpenApi();
     app.UseSwagger();
     app.UseSwaggerUI(c =>
@@ -34,7 +33,7 @@ if (app.Environment.IsDevelopment())
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "Phones v1");
         c.RoutePrefix = "swagger";
     });
-}
+
 
 app.UseDefaultFiles(); 
 app.UseStaticFiles();

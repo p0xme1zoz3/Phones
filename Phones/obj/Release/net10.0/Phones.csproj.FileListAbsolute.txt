@@ -152,3 +152,4 @@ D:\projects\Phones\phones\Phones\obj\Release\net10.0\refint\Phones.dll
 D:\projects\Phones\phones\Phones\obj\Release\net10.0\Phones.pdb
 D:\projects\Phones\phones\Phones\obj\Release\net10.0\Phones.genruntimeconfig.cache
 D:\projects\Phones\phones\Phones\obj\Release\net10.0\ref\Phones.dll
+D:\projects\Phones\Phones\Phones\bin\Release\net10.0\Data\phones_db.db
