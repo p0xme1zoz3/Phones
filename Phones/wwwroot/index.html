@@ -1,11 +1,146 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <title>Добро пожаловать в My API</title>
+    <title>Phones API Frontend</title>
+    <style>
+        td {padding:5px;}
+        button{margin: 5px;}
+    </style>
 </head>
 <body>
-<h1>My API</h1>
-<p>Это стартовая страница моего Web API.</p>
-<a href="/swagger">Перейти к Swagger UI</a>
+<h1>Phones API</h1>
+<p><a href="/swagger">Документация API (Swagger)</a></p>
+
+<h2>Список телефонов</h2>
+
+<div>
+    <input type="hidden" id="phoneId" />
+    <p>
+        Brand:<br/>
+        <input id="phoneBrand" />
+    </p>
+    <p>
+        Model:<br />
+        <input id="phoneModel" />
+    </p>
+    <p>
+        Date:<br />
+        <input id="phoneDate" type="date" />
+    </p>
+    <p>
+        Price:<br />
+        <input id="phonePrice" type="number" />
+    </p>
+    <p>
+        <button id="saveBtn">Сохранить</button>
+        <button id="resetBtn">Сбросить</button>
+    </p>
+</div>
+
+<table border="1">
+    <thead>
+    <tr><th>#</th><th>Brand</th><th>Model</th><th>Date</th><th>Price</th><th>Actions</th></tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<script>
+    async function getPhones() {
+        const response = await fetch("/api/phones");
+        if (response.ok) {
+            const phones = await response.json();
+            const rows = document.querySelector("tbody");
+            rows.innerHTML = "";
+            phones.forEach((phone, index) => rows.append(row(phone, index + 1)));
+        }
+    }
+
+    async function getPhone(id) {
+        const response = await fetch(`/api/phones/${id}`);
+        if (response.ok) {
+            const phone = await response.json();
+            document.getElementById("phoneId").value = phone.id;
+            document.getElementById("phoneBrand").value = phone.brand;
+            document.getElementById("phoneModel").value = phone.model;
+            document.getElementById("phoneDate").value = phone.date;
+            document.getElementById("phonePrice").value = phone.price;
+        }
+    }
+
+    async function createPhone(brand, model, date, price) {
+        const response = await fetch("/api/phones/create", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ Brand: brand, Model: model, Date: date, Price: price })
+        });
+        if (!response.ok) {
+            console.log(await response.json());
+        }
+    }
+
+    async function editPhone(id, brand, model, date, price) {
+        const response = await fetch("/api/phones/update", {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ Id: id, Brand: brand, Model: model, Date: date, Price: price })
+        });
+        if (!response.ok) {
+            console.log(await response.json());
+        }
+    }
+
+    async function deletePhone(id) {
+        const response = await fetch(`/api/phones/delete/${id}`, { method: "DELETE" });
+        if (response.ok) {
+            document.querySelector(`tr[data-rowid='${id}']`).remove();
+        }
+    }
+
+    function row(phone, index) {
+        const tr = document.createElement("tr");
+        tr.setAttribute("data-rowid", phone.id);
+
+        tr.innerHTML = `
+            <td>${index}</td>
+            <td>${phone.brand}</td>
+            <td>${phone.model}</td>
+            <td>${phone.date}</td>
+            <td>${phone.price}</td>
+            <td>
+                <button onclick="getPhone(${phone.id})">Изменить</button>
+                <button onclick="deletePhone(${phone.id})">Удалить</button>
+            </td>
+        `;
+        return tr;
+    }
+
+    document.getElementById("saveBtn").addEventListener("click", async () => {
+        const id = document.getElementById("phoneId").value;
+        const brand = document.getElementById("phoneBrand").value;
+        const model = document.getElementById("phoneModel").value;
+        const date = document.getElementById("phoneDate").value;
+        const price = document.getElementById("phonePrice").value;
+
+        if (id) {
+            await editPhone(id, brand, model, date, price);
+        } else {
+            await createPhone(brand, model, date, price);
+        }
+        await getPhones();
+        resetForm();
+    });
+
+    document.getElementById("resetBtn").addEventListener("click", resetForm);
+
+    function resetForm() {
+        document.getElementById("phoneId").value = "";
+        document.getElementById("phoneBrand").value = "";
+        document.getElementById("phoneModel").value = "";
+        document.getElementById("phoneDate").value = "";
+        document.getElementById("phonePrice").value = "";
+    }
+
+    getPhones();
+</script>
 </body>
 </html>
