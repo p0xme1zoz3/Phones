@@ -9,9 +9,9 @@
 </head>
 <body>
 <h1>Phones API</h1>
-<p><a href="/swagger">Документация API (Swagger)</a></p>
+<p><a href="/swagger">Documentation API (Swagger)</a></p>
 
-<h2>Список телефонов</h2>
+<h2>Phone list</h2>
 
 <div>
     <input type="hidden" id="phoneId" />
@@ -32,8 +32,8 @@
         <input id="phonePrice" type="number" />
     </p>
     <p>
-        <button id="saveBtn">Сохранить</button>
-        <button id="resetBtn">Сбросить</button>
+        <button id="saveBtn">Save</button>
+        <button id="resetBtn">Reset</button>
     </p>
 </div>
 
@@ -107,8 +107,8 @@
             <td>${phone.date ? new Date(phone.date).toLocaleDateString("ru-RU") : ""}</td>
             <td>${phone.price}</td>
             <td>
-                <button onclick="getPhone(${phone.id})">Изменить</button>
-                <button onclick="deletePhone(${phone.id})">Удалить</button>
+                <button onclick="getPhone(${phone.id})">Update</button>
+                <button onclick="deletePhone(${phone.id})">Delete</button>
             </td>
         `;
         return tr;
@@ -149,10 +149,23 @@
 
         let errors = [];
 
-        if (!brand) errors.push("Введите бренд");
-        if (!model) errors.push("Введите модель");
-        if (!date) errors.push("Укажите дату");
-        if (!price || price <= 0) errors.push("Цена должна быть больше 0");
+        if (!brand) errors.push("Enter the brand");
+        if (!model) errors.push("Enter the model");
+        if (!date)
+        {
+            errors.push("Specify the correct date!");
+        } 
+        else 
+        {
+            const dateStr = new Date(date);
+            const minDate = new Date("1994-06-17");
+            const maxDate = new Date(); // сегодня
+
+            if (dateStr < minDate || dateStr > maxDate) {
+                errors.push("Specify the correct date!");
+            }
+        }
+        if (!price || price <= 0) errors.push("The price must be more than 0");
 
         if (errors.length > 0) {
             alert(errors.join("\n"));
