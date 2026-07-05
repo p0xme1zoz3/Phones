@@ -21,7 +21,7 @@ public class ApplicationContext : DbContext
             new Phone { Id = 5, Brand = "Samsung", Model = "B310E",Date = new DateOnly(2015,2,1), Price = 5000},
             new Phone { Id = 6, Brand = "Microsoft", Model = "Lumia 730",Date = new DateOnly(2015,3,22), Price = 30000},
             new Phone { Id = 7, Brand = "Meizu", Model = "M2 Mini",Date = new DateOnly(2016,9,1), Price = 70000},
-            new Phone { Id = 8, Brand = "Xiaomi", Model = "Redmi Note 6 Pro",Date = new DateOnly(2018,12,30)}
+            new Phone { Id = 8, Brand = "Xiaomi", Model = "Redmi Note 6 Pro",Date = new DateOnly(2018,12,30), Price = 80000}
             );
     }
 }

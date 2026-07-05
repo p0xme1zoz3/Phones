@@ -303,4 +303,4 @@ C:\Games\Phones\Phones\Phones\obj\Debug\net10.0\Phones.pdb
 C:\Games\Phones\Phones\Phones\obj\Debug\net10.0\Phones.genruntimeconfig.cache
 C:\Games\Phones\Phones\Phones\obj\Debug\net10.0\ref\Phones.dll
 D:\projects\Phones\Phones\Phones\bin\Debug\net10.0\Phones.staticwebassets.runtime.json
-D:\projects\Phones\Phones\Phones\obj\Debug\net10.0\compressed\fkc0rr9r40-{0}-5gxga44mhk-5gxga44mhk.gz
+D:\projects\Phones\Phones\Phones\obj\Debug\net10.0\compressed\fkc0rr9r40-{0}-tiirnqn6c7-tiirnqn6c7.gz
