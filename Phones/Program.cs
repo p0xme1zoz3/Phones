@@ -31,8 +31,15 @@ if (app.Environment.IsDevelopment())
 {
     //app.MapOpenApi();
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Phones v1");
+        c.RoutePrefix = "swagger";
+    });
 }
+
+app.UseDefaultFiles(); 
+app.UseStaticFiles();
 
 app.UseHttpsRedirection();
 
@@ -50,7 +57,7 @@ app.UseExceptionHandler(errorApp =>
     });
 });
 
-app.MapGet("/", () => "All phones");
+//app.MapGet("/", () => "All phones");
 
 app.MapGet("/api/phones", async (IPhoneService phoneService) => await phoneService.AllPhones());
 
