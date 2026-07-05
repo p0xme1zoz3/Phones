@@ -7,10 +7,10 @@ public static class PhoneMapper
 {
     public static Phone ToEntity(PhoneAddDto phoneDto)
     {
-        return new Phone{Brand = phoneDto.Brand, Model = phoneDto.Model, Price = phoneDto.Price};
+        return new Phone{Brand = phoneDto.Brand, Model = phoneDto.Model, Date = phoneDto.Date, Price = phoneDto.Price};
     }
     public static Phone ToEntity(PhoneUpdateDto phoneDto)
     {
-        return new Phone{Id = phoneDto.Id, Brand = phoneDto.Brand, Model = phoneDto.Model, Price = phoneDto.Price};
+        return new Phone{Id = phoneDto.Id, Brand = phoneDto.Brand, Model = phoneDto.Model, Date = phoneDto.Date, Price = phoneDto.Price};
     }
 }

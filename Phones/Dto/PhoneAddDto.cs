@@ -12,7 +12,7 @@ public class PhoneAddDto
     [StringLength(50, MinimumLength = 1,ErrorMessage = "Length from 1 to 50 characters")]
     public string Model { get; set; }
     
-    public DateOnly Date { get; set; }
+    public DateOnly? Date { get; set; }
     
     [Range(0, int.MaxValue, ErrorMessage = "Price from 0 to ...")]
     public decimal Price { get; set; }
